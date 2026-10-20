@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF7F1">
+<style>:root{color-scheme:light}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Our Little Forever</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: one scrapbook column, bottom tab bar, polaroid album, paper cards. Palette carried over from the Android app (cream, blush, rose, plum ink). */
+:root {
+  --bg: #FFF7F1;
+  --paper: #FFFDFC;
+  --blush: #F5DCE1;
+  --rose: #B75C73;
+  --ink: #49313A;
+  --muted: #86666F;
+  --line: #EBD3D9;
+  --tape: #F0D9A8;
+  --on-rose: #FFFFFF;
+  --shadow: 0 2px 10px rgba(73, 49, 58, .10);
+  --font-body: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #231920; --paper: #2E2229; --blush: #4A2F38; --rose: #E58AA3; --ink: #F6E7EB;
+    --muted: #C3A6AF; --line: #4B3640; --tape: #6B5A33; --on-rose: #2A1519;
+    --shadow: 0 2px 12px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #231920; --paper: #2E2229; --blush: #4A2F38; --rose: #E58AA3; --ink: #F6E7EB;
+  --muted: #C3A6AF; --line: #4B3640; --tape: #6B5A33; --on-rose: #2A1519;
+  --shadow: 0 2px 12px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 96px;
+}
+.wrap { max-width: 640px; margin: 0 auto; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--rose); outline-offset: 2px; }
+
+.top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0 6px; gap: 12px; }
+.brand b { display: block; font-weight: 800; font-size: 19px; letter-spacing: -.01em; }
+.brand span { font-family: var(--font-hand); font-size: 20px; color: var(--rose); line-height: 1; }
+.icon-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); display: grid; place-items: center; color: var(--rose); }
+
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 1px solid var(--line); z-index: 20;
+  padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
+.tabs-in { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.tab { border: 0; background: none; padding: 6px 2px; border-radius: 14px; display: grid; justify-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-selected="true"] { color: var(--rose); background: var(--blush); }
+
+section[data-page] { display: grid; gap: 16px; padding-top: 10px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); min-width: 0; }
+.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--rose); }
+.page-title { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+.page-sub { font-family: var(--font-hand); font-size: 22px; color: var(--rose); line-height: 1.1; margin-top: 2px; }
+.btn { border: 0; background: var(--rose); color: var(--on-rose); border-radius: 999px; padding: 11px 20px; font-weight: 700; min-height: 44px; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+.btn:disabled { opacity: .5; cursor: default; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.muted { color: var(--muted); font-size: 14px; }
+
+/* Home */
+.hero { text-align: left; position: relative; overflow: hidden; }
+.hero h1 { font-size: clamp(38px, 11vw, 56px); line-height: 1; font-weight: 800; letter-spacing: -.03em; margin: 8px 0 6px; }
+.hero .dates { font-family: var(--font-hand); font-size: 24px; color: var(--rose); }
+.cover { margin: 16px auto 4px; width: min(78%, 300px); background: var(--paper); padding: 9px 9px 12px; border: 1px solid var(--line); box-shadow: var(--shadow); transform: rotate(-2deg); border-radius: 4px; position: relative; }
+.cover::before { content: ""; position: absolute; top: -10px; left: 50%; width: 60px; height: 18px; transform: translateX(-50%) rotate(3deg); background: var(--tape); opacity: .85; }
+.cover img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 30%; background: var(--blush); }
+.cover figcaption { font-family: var(--font-hand); font-size: 22px; text-align: center; padding-top: 6px; color: var(--ink); line-height: 1.1; }
+.counter { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.count { flex: 1 1 90px; background: var(--blush); border-radius: 16px; padding: 10px 12px; }
+.count b { display: block; font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.count span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.hero p.intro { margin-top: 14px; }
+.surprise-text { font-family: var(--font-hand); font-size: 28px; line-height: 1.15; margin: 8px 0 12px; min-height: 64px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile { border: 0; text-align: left; background: var(--blush); border-radius: 18px; padding: 16px; display: grid; gap: 4px; }
+.tile b { font-size: 17px; }
+.tile span { font-size: 13px; color: var(--rose); font-weight: 700; }
+.tile svg { width: 28px; height: 28px; color: var(--rose); }
+.tile.wide { grid-column: 1 / -1; }
+.promise { font-size: 17px; line-height: 1.6; margin-top: 6px; }
+
+/* Album */
+.polaroids { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; padding: 8px 2px; }
+@media (min-width: 520px) { .polaroids { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.polaroid { position: relative; background: var(--paper); padding: 9px 9px 10px; border: 1px solid var(--line); box-shadow: var(--shadow); transform: rotate(var(--tilt, 0deg)); border-radius: 4px; }
+.polaroid:nth-child(4n+1) { --tilt: -2.2deg; }
+.polaroid:nth-child(4n+2) { --tilt: 1.6deg; }
+.polaroid:nth-child(4n+3) { --tilt: -.8deg; }
+.polaroid:nth-child(4n+4) { --tilt: 2.4deg; }
+.polaroid::before { content: ""; position: absolute; top: -10px; left: 50%; width: 54px; height: 18px; transform: translateX(-50%) rotate(-3deg); background: var(--tape); opacity: .85; }
+.polaroid .ph { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border: 0; padding: 0; background: var(--blush); cursor: zoom-in; }
+.polaroid input { width: 100%; border: 0; background: transparent; font-family: var(--font-hand); font-size: 20px; color: var(--ink); text-align: center; padding: 6px 2px 0; }
+.polaroid input::placeholder { color: var(--muted); }
+.polaroid .del { position: absolute; top: -8px; right: -8px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--rose); display: grid; place-items: center; padding: 0; }
+.empty { text-align: center; padding: 26px 8px; }
+.empty .big { font-family: var(--font-hand); font-size: 30px; color: var(--rose); line-height: 1.1; }
+.lightbox { position: fixed; inset: 0; background: rgba(20, 10, 14, .88); z-index: 40; display: grid; place-items: center; padding: 20px; }
+.lightbox img { max-width: 100%; max-height: 86vh; border-radius: 6px; }
+.lightbox button { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: 14px; }
+
+/* Memories */
+.timeline { display: grid; gap: 14px; position: relative; }
+.t-item { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 12px; align-items: start; }
+.dot { width: 38px; height: 38px; border-radius: 50%; background: var(--blush); color: var(--rose); display: grid; place-items: center; }
+.dot svg { width: 18px; height: 18px; }
+.t-item h3 { font-size: 18px; margin: 3px 0 4px; }
+.t-item p { overflow-wrap: anywhere; }
+.t-date { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--rose); }
+.t-del { margin-top: 8px; border: 0; background: none; color: var(--muted); font-size: 13px; text-decoration: underline; padding: 6px 0; min-height: 32px; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; font-size: 14px; }
+.field input, .field textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 12px; width: 100%; min-width: 0; }
+.field textarea { min-height: 90px; resize: vertical; }
+.form { display: grid; gap: 12px; }
+.promises { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.promises li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; }
+.promises svg { width: 20px; height: 20px; color: var(--rose); margin-top: 3px; }
+
+/* Games */
+.opts { display: grid; gap: 8px; margin-top: 12px; }
+.opt { text-align: left; background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; min-height: 48px; font-weight: 600; }
+.opt.right { border-color: #4f9a62; background: color-mix(in srgb, #4f9a62 22%, var(--paper)); }
+.opt.wrong { border-color: #c4574f; background: color-mix(in srgb, #c4574f 20%, var(--paper)); }
+.q-title { font-size: 20px; font-weight: 800; line-height: 1.25; margin-top: 6px; }
+.note { margin-top: 12px; color: var(--rose); font-weight: 600; }
+.stat { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.arena { position: relative; height: 300px; margin-top: 12px; border-radius: 18px; background: var(--blush); overflow: hidden; touch-action: manipulation; }
+.arena .msg { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; padding: 16px; gap: 6px; }
+.heart { position: absolute; top: -48px; width: 44px; height: 44px; border: 0; padding: 0; background: none; color: var(--rose); animation: fall var(--d, 3s) linear forwards; }
+.heart.gold { color: #D9A21B; }
+.heart svg { width: 100%; height: 100%; display: block; }
+@keyframes fall { to { transform: translateY(calc(var(--h, 300px) + 60px)) rotate(var(--r, 12deg)); } }
+.pop { position: absolute; pointer-events: none; font-weight: 800; color: var(--ink); animation: pop .6s ease-out forwards; }
+@keyframes pop { to { transform: translateY(-26px); opacity: 0; } }
+.match { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.mcard { aspect-ratio: 1; border: 0; border-radius: 14px; font-size: 30px; background: var(--rose); color: var(--on-rose); display: grid; place-items: center; padding: 0; }
+.mcard svg { width: 44%; height: 44%; opacity: .75; }
+.mcard.up { background: var(--paper); border: 1.5px solid var(--line); }
+.mcard.done { background: var(--blush); border: 1.5px solid var(--rose); }
+
+/* Letter */
+.letter { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 22px 20px; box-shadow: var(--shadow); position: relative; background-image: repeating-linear-gradient(transparent 0 33px, var(--line) 33px 34px); background-position: 0 14px; }
+.letter .to { font-family: var(--font-hand); font-size: 26px; color: var(--rose); line-height: 1; }
+.letter h2 { font-size: 22px; margin: 6px 0 12px; font-weight: 800; }
+.letter p { font-family: var(--font-hand); font-size: 23px; line-height: 34px; margin-bottom: 14px; color: var(--ink); }
+.letter .sign { text-align: right; margin: 6px 0 0; }
+.letter.closed { text-align: center; padding: 38px 20px; }
+.letter.closed p { margin: 0; }
+.rise { animation: unfold .6s ease-out; transform-origin: top; }
+@keyframes unfold { from { opacity: 0; transform: scaleY(.9); } to { opacity: 1; transform: none; } }
+.floaters { position: fixed; inset: 0; pointer-events: none; z-index: 30; overflow: hidden; }
+.floaters span { position: absolute; bottom: -40px; color: var(--rose); animation: rise var(--d, 3s) ease-out forwards; }
+@keyframes rise { to { transform: translateY(-110vh) translateX(var(--x, 0px)) rotate(var(--r, 0deg)); opacity: 0; } }
+.saved-note { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-hand); font-size: 22px; line-height: 1.25; background: var(--bg); border-radius: 12px; padding: 10px 12px; }
+.toast { position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; z-index: 50; max-width: calc(100vw - 32px); }
+@media (prefers-reduced-motion: reduce) { .rise, .pop { animation: none; } .floaters span { animation-duration: .01s; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.2l-1.4-1.3C5.4 15.2 2 12.1 2 8.3 2 5.2 4.4 3 7.4 3c1.7 0 3.4.8 4.6 2.1C13.2 3.8 14.9 3 16.6 3 19.6 3 22 5.200 22 8.300c0 3.800-3.400 6.900-8.600 11.600L12 21.200z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-photo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/></g></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M9 7h6"/></symbol>
+  <symbol id="i-game" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="2.500" y="7" width="19" height="11" rx="5"/><path d="M8 10v5M5.500 12.500h5"/><circle cx="15.500" cy="11" r=".6"/><circle cx="18" cy="13.500" r=".6"/></g></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></g></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l1.900 5.600L19.500 9.500l-5.600 1.900L12 17l-1.900-5.600L4.500 9.500l5.600-1.900zM19 15l.9 2.600 2.600.9-2.600.9L19 22l-.9-2.600-2.600-.9 2.600-.9z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>Our Little Forever</b><span>little moments, endless love</span></div>
+    <button class="icon-btn" id="topSurprise" aria-label="Open a surprise"><svg width="22" height="22"><use href="#i-spark"/></svg></button>
+  </header>
+
+  <!-- HOME -->
+  <section data-page="home">
+    <div class="card hero">
+      <div class="eyebrow">Our story</div>
+      <h1>Happy 2nd Anniversary!</h1>
+      <div class="dates">21 October 2024 &rarr; 21 October 2026</div>
+      <figure class="cover" style="margin-inline:auto"><img src="p02.jpg" alt="The two of us, smiling at each other" width="750" height="1000"><figcaption>us, two years in</figcaption></figure>
+      <div class="counter" aria-label="Time together">
+        <div class="count"><b id="cDays">730</b><span>days together</span></div>
+        <div class="count"><b id="cHours">17520</b><span>hours of us</span></div>
+        <div class="count"><b>2</b><span>years of memories</span></div>
+      </div>
+      <p class="intro">A scrapbook of the little things that became our favourite story. Add your photos, write down your memories, play a few games and open the letter at the end.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">A little note for you</div>
+      <p class="surprise-text" id="surpriseText">Tap below for a little reminder.</p>
+      <button class="btn" id="surpriseBtn">Open a surprise</button>
+    </div>
+    <div>
+      <h2 class="page-title">Little corners of us</h2>
+      <p class="page-sub">pick a page and make a memory</p>
+    </div>
+    <div class="tiles">
+      <button class="tile" data-go="album"><svg><use href="#i-photo"/></svg><b>Our album</b><span>Open &rarr;</span></button>
+      <button class="tile" data-go="games"><svg><use href="#i-game"/></svg><b>Love games</b><span>Play &rarr;</span></button>
+      <button class="tile wide" data-go="letter"><svg><use href="#i-mail"/></svg><b>A letter for you</b><span>Open &rarr;</span></button>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Our little promise</div>
+      <p class="promise">Keep choosing kindness, laughter, honest talks, and the small moments that make a relationship feel like home.</p>
+    </div>
+  </section>
+
+  <!-- ALBUM -->
+  <section data-page="album" hidden>
+    <div><h2 class="page-title">Our photo album</h2><p class="page-sub">the real moments live here</p></div>
+    <div class="card">
+      <p>Sixteen of our moments are pinned here. Tap any photo to see it full size. You can also add more from your phone, and type a caption under any photo you add.</p>
+      <p class="muted" style="margin-top:8px">Photos you add are saved inside this browser on this device only. They are not uploaded anywhere.</p>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="addPhotos">Choose photos</button>
+        <input type="file" id="photoInput" accept="image/*" multiple hidden>
+      </div>
+    </div>
+    <div id="photoEmpty" class="card empty"><div class="big">Your scrapbook is waiting</div><p class="muted">Add photos to fill these pages.</p></div>
+    <div class="polaroids" id="polaroids"></div>
+  </section>
+
+  <!-- MEMORIES -->
+  <section data-page="memories" hidden>
+    <div><h2 class="page-title">Our memories</h2><p class="page-sub">a timeline with room for more</p></div>
+    <div class="card">
+      <div class="eyebrow">Since 21 October 2024</div>
+      <p style="margin-top:6px;font-size:18px">Two years of shared memories, and still writing the story.</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+    <div class="card">
+      <div class="eyebrow">Add a memory</div>
+      <form class="form" id="memForm" style="margin-top:10px">
+        <div class="field"><label for="mDate">When</label><input id="mDate" type="date" required></div>
+        <div class="field"><label for="mTitle">Title</label><input id="mTitle" type="text" maxlength="60" placeholder="Our first trip, a funny evening..." required></div>
+        <div class="field"><label for="mText">What happened</label><textarea id="mText" maxlength="500" placeholder="Write the moment the way you remember it."></textarea></div>
+        <div><button class="btn" type="submit">Save memory</button></div>
+      </form>
+      <p class="muted" style="margin-top:10px">Memories are saved in this browser on this device.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Our little promises</div>
+      <ul class="promises">
+        <li><svg><use href="#i-heart"/></svg><span>Listen first, and answer with kindness.</span></li>
+        <li><svg><use href="#i-heart"/></svg><span>Say the small thank-yous out loud.</span></li>
+        <li><svg><use href="#i-heart"/></svg><span>Talk it through before the day ends.</span></li>
+        <li><svg><use href="#i-heart"/></svg><span>Keep making room for laughter and for new memories.</span></li>
+        <li><svg><use href="#i-heart"/></svg><span>Choose each other again on the ordinary days.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section data-page="games" hidden>
+    <div><h2 class="page-title">Play with love</h2><p class="page-sub">tiny games, big smiles</p></div>
+
+    <div class="card" id="quizCard">
+      <div class="eyebrow">The little love quiz</div>
+      <div id="quizBody"></div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Catch the hearts</div>
+      <p style="margin-top:6px">Tap the falling hearts for 20 seconds. Gold ones are worth 3.</p>
+      <div class="row" style="margin-top:10px;justify-content:space-between">
+        <div><div class="stat" id="hScore">0</div><div class="muted">score</div></div>
+        <div><div class="stat" id="hTime">20</div><div class="muted">seconds</div></div>
+        <div><div class="stat" id="hBest">0</div><div class="muted">best</div></div>
+      </div>
+      <div class="arena" id="arena"><div class="msg" id="arenaMsg"><b>Ready?</b><div><button class="btn" id="hStart">Start playing</button></div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Memory match</div>
+      <p style="margin-top:6px">Flip two cards at a time and match the six photos of us.</p>
+      <div class="row" style="margin-top:10px;justify-content:space-between">
+        <div><div class="stat" id="mMoves">0</div><div class="muted">moves</div></div>
+        <div><div class="stat" id="mBest">-</div><div class="muted">best</div></div>
+        <button class="btn ghost" id="mReset">Shuffle</button>
+      </div>
+      <div class="match" id="match"></div>
+      <p class="note" id="mWin" hidden></p>
+    </div>
+  </section>
+
+  <!-- LETTER -->
+  <section data-page="letter" hidden>
+    <div><h2 class="page-title">A letter for you</h2><p class="page-sub">a little page to keep close</p></div>
+    <div id="letterBox"></div>
+    <div class="row">
+      <button class="btn" id="letterBtn">Open the letter</button>
+      <button class="btn ghost" id="hugBtn">Send a virtual hug</button>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Leave a little note</div>
+      <div class="form" style="margin-top:10px">
+        <div class="field"><label for="noteText">What was your favourite memory?</label><textarea id="noteText" maxlength="800" placeholder="Write a memory or a message..."></textarea></div>
+        <div class="row"><button class="btn" id="noteSave">Save note</button><span class="muted" id="noteStatus"></span></div>
+      </div>
+      <div id="noteList" style="display:grid;gap:10px;margin-top:14px"></div>
+      <p class="muted" style="margin-top:10px">Notes stay in this browser on this device. They are not sent to anyone.</p>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Pages"><div class="tabs-in" role="tablist">
+  <button class="tab" role="tab" data-tab="home" aria-selected="true"><svg><use href="#i-home"/></svg>Home</button>
+  <button class="tab" role="tab" data-tab="album" aria-selected="false"><svg><use href="#i-photo"/></svg>Album</button>
+  <button class="tab" role="tab" data-tab="memories" aria-selected="false"><svg><use href="#i-book"/></svg>Memories</button>
+  <button class="tab" role="tab" data-tab="games" aria-selected="false"><svg><use href="#i-game"/></svg>Games</button>
+  <button class="tab" role="tab" data-tab="letter" aria-selected="false"><svg><use href="#i-mail"/></svg>Letter</button>
+</div></nav>
+<div class="floaters" id="floaters" aria-hidden="true"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var heartSvg = '<svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>';
+  function store(key, val) {
+    try { if (val === undefined) { var v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } localStorage.setItem(key, JSON.stringify(val)); } catch (e) { return null; }
+  }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var toastTimer;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2200); }
+
+  /* ---------- tabs ---------- */
+  function go(name) {
+    $$('section[data-page]').forEach(function (s) { s.hidden = s.dataset.page !== name; });
+    $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', t.dataset.tab === name ? 'true' : 'false'); });
+    window.scrollTo(0, 0);
+  }
+  $$('.tab').forEach(function (t) { t.addEventListener('click', function () { go(t.dataset.tab); }); });
+  $$('[data-go]').forEach(function (t) { t.addEventListener('click', function () { go(t.dataset.go); }); });
+
+  /* ---------- days together ---------- */
+  (function () {
+    var start = Date.UTC(2024, 9, 21), n = new Date();
+    var today = Date.UTC(n.getFullYear(), n.getMonth(), n.getDate());
+    var days = Math.max(0, Math.round((today - start) / 86400000));
+    $('#cDays').textContent = days.toLocaleString();
+    $('#cHours').textContent = (days * 24).toLocaleString();
+  })();
+
+  /* ---------- floating hearts ---------- */
+  function floatHearts(n) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var box = $('#floaters');
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement('span');
+      var size = 18 + Math.random() * 28;
+      s.innerHTML = heartSvg; s.style.width = s.style.height = size + 'px';
+      s.style.left = (5 + Math.random() * 90) + '%';
+      s.style.setProperty('--d', (2.2 + Math.random() * 1.8) + 's');
+      s.style.setProperty('--x', (Math.random() * 80 - 40) + 'px');
+      s.style.setProperty('--r', (Math.random() * 60 - 30) + 'deg');
+      s.style.animationDelay = (Math.random() * .5) + 's';
+      box.appendChild(s);
+      (function (el) { setTimeout(function () { el.remove(); }, 4800); })(s);
+    }
+  }
+
+  /* ---------- surprises ---------- */
+  var surprises = [
+    'You make ordinary moments feel like favourite memories.',
+    'A tiny reminder: your feelings deserve kindness and care.',
+    "Here's a pocket-sized hug for whenever you need one.",
+    'The best chapters are often made of little things.',
+    'You are appreciated for who you are, not for being perfect.',
+    'Save a little room today for laughter and a new memory.',
+    'Two years in, and I still look forward to your messages.',
+    'Thank you for being the calm in my busy days.'
+  ];
+  var lastS = -1;
+  function surprise() {
+    var i; do { i = Math.floor(Math.random() * surprises.length); } while (i === lastS);
+    lastS = i; $('#surpriseText').textContent = surprises[i]; floatHearts(6);
+  }
+  $('#surpriseBtn').addEventListener('click', surprise);
+  $('#topSurprise').addEventListener('click', function () { go('home'); surprise(); });
+
+  /* ---------- album (IndexedDB, with in-memory fallback) ---------- */
+  var mem = [], db = null;
+  function openDB() {
+    return new Promise(function (res) {
+      try {
+        var r = indexedDB.open('olf-photos', 1);
+        r.onupgradeneeded = function () { r.result.createObjectStore('p', { keyPath: 'id' }); };
+        r.onsuccess = function () { db = r.result; res(); };
+        r.onerror = function () { res(); };
+      } catch (e) { res(); }
+    });
+  }
+  function dbAll() {
+    return new Promise(function (res) {
+      if (!db) return res(mem.slice());
+      try { var q = db.transaction('p').objectStore('p').getAll(); q.onsuccess = function () { res(q.result.sort(function (a, b) { return a.id - b.id; })); }; q.onerror = function () { res(mem.slice()); }; } catch (e) { res(mem.slice()); }
+    });
+  }
+  function dbPut(item) {
+    var i = mem.findIndex(function (m) { return m.id === item.id; });
+    if (i >= 0) mem[i] = item; else mem.push(item);
+    if (!db) return;
+    try { db.transaction('p', 'readwrite').objectStore('p').put(item); } catch (e) {}
+  }
+  function dbDel(id) {
+    mem = mem.filter(function (m) { return m.id !== id; });
+    if (!db) return;
+    try { db.transaction('p', 'readwrite').objectStore('p').delete(id); } catch (e) {}
+  }
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        var max = 1100, sc = Math.min(1, max / Math.max(img.width, img.height));
+        var c = document.createElement('canvas'); c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rej(); };
+      img.src = url;
+    });
+  }
+  var seedPhotos = [
+    ['p02.jpg', 'Close together'], ['p01.jpg', 'Under the palms'], ['p03.jpg', 'Made me laugh'],
+    ['p04.jpg', 'That look'], ['p05.jpg', 'Side by side'], ['p06.jpg', 'City lights'],
+    ['p07.jpg', 'Lost in thought'], ['p08.jpg', 'Two of a kind'], ['p09.jpg', 'Blessings'],
+    ['p10.jpg', 'Hide and seek'], ['p11.jpg', 'Festive evening'], ['p12.jpg', 'Still smiling'],
+    ['p13.jpg', 'Birthday surprise'], ['p14.jpg', 'Late-night ride'], ['p19.jpg', 'Metro breeze'],
+    ['p20.jpg', 'Pink glow']
+  ];
+  function renderPhotos() {
+    dbAll().then(function (list) {
+      $('#photoEmpty').hidden = true;
+      var box = $('#polaroids'); box.innerHTML = '';
+      seedPhotos.forEach(function (s) {
+        var d = document.createElement('figure'); d.className = 'polaroid'; d.style.margin = '0';
+        d.innerHTML = '<button class="ph" aria-label="View photo full size"></button><div style="font-family:var(--font-hand);font-size:20px;text-align:center;padding:6px 2px 0;line-height:1.1"></div>';
+        $('.ph', d).style.background = 'url(' + s[0] + ') center 25%/cover';
+        $('.ph', d).addEventListener('click', function () { openLight(s[0]); });
+        $('div', d).textContent = s[1];
+        box.appendChild(d);
+      });
+      list.forEach(function (p) {
+        var d = document.createElement('figure'); d.className = 'polaroid'; d.style.margin = '0';
+        d.innerHTML = '<button class="ph" aria-label="View photo full size"></button><input type="text" maxlength="40" placeholder="Add a caption" aria-label="Caption"><button class="del" aria-label="Remove photo"><svg width="16" height="16"><use href="#i-trash"/></svg></button>';
+        var ph = $('.ph', d); ph.style.background = 'url(' + p.data + ') center/cover';
+        var inp = $('input', d); inp.value = p.caption || '';
+        inp.addEventListener('change', function () { p.caption = inp.value; dbPut(p); });
+        ph.addEventListener('click', function () { openLight(p.data); });
+        $('.del', d).addEventListener('click', function () { dbDel(p.id); renderPhotos(); toast('Photo removed'); });
+        box.appendChild(d);
+      });
+    });
+  }
+  function openLight(src) {
+    var l = document.createElement('div'); l.className = 'lightbox';
+    l.innerHTML = '<img alt="Our photo"><button class="icon-btn" aria-label="Close"><svg width="20" height="20"><use href="#i-x"/></svg></button>';
+    $('img', l).src = src;
+    l.addEventListener('click', function () { l.remove(); });
+    document.body.appendChild(l);
+  }
+  $('#addPhotos').addEventListener('click', function () { $('#photoInput').click(); });
+  $('#photoInput').addEventListener('change', function (e) {
+    var files = Array.prototype.slice.call(e.target.files || []); e.target.value = '';
+    if (!files.length) return;
+    toast('Adding ' + files.length + ' photo' + (files.length > 1 ? 's' : '') + '...');
+    var base = Date.now();
+    files.reduce(function (chain, f, i) {
+      return chain.then(function () { return shrink(f).then(function (data) { dbPut({ id: base + i, data: data, caption: '' }); }, function () {}); });
+    }, Promise.resolve()).then(function () { renderPhotos(); toast('Photos added'); });
+  });
+
+  /* ---------- memories ---------- */
+  var seed = [
+    { date: '21 Oct 2024', title: 'The beginning', text: 'The first page of our story.' },
+    { date: 'The little things', title: 'Everyday memories', text: 'The conversations, laughs, and moments that became special.' },
+    { date: 'Growing together', title: 'More than a date', text: 'Learning, listening, and choosing each other with care.' },
+    { date: '21 Oct 2026', title: 'Two years of us', text: 'A new page, with many more memories still to make.' }
+  ];
+  function fmt(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  function renderTimeline() {
+    var mine = (store('olf-mem') || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var tl = $('#timeline'); tl.innerHTML = '';
+    function add(date, title, text, id) {
+      var d = document.createElement('div'); d.className = 't-item';
+      d.innerHTML = '<div class="dot"><svg><use href="#i-heart"/></svg></div><div class="card"><div class="t-date">' + esc(date) + '</div><h3>' + esc(title) + '</h3><p>' + esc(text) + '</p>' + (id ? '<button class="t-del">Delete</button>' : '') + '</div>';
+      if (id) $('.t-del', d).addEventListener('click', function () { store('olf-mem', (store('olf-mem') || []).filter(function (m) { return m.id !== id; })); renderTimeline(); });
+      tl.appendChild(d);
+    }
+    add(seed[0].date, seed[0].title, seed[0].text);
+    add(seed[1].date, seed[1].title, seed[1].text);
+    add(seed[2].date, seed[2].title, seed[2].text);
+    mine.forEach(function (m) { add(fmt(m.date), m.title, m.text, m.id); });
+    add(seed[3].date, seed[3].title, seed[3].text);
+  }
+  $('#memForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var list = store('olf-mem') || [];
+    list.push({ id: Date.now(), date: $('#mDate').value, title: $('#mTitle').value.trim(), text: $('#mText').value.trim() });
+    store('olf-mem', list); e.target.reset(); renderTimeline(); toast('Memory saved'); floatHearts(5);
+  });
+
+  /* ---------- quiz ---------- */
+  var quiz = [
+    { q: 'What makes a relationship feel strongest?', o: ['Listening and respect', 'Never disagreeing', 'Always guessing'], c: 0, n: 'Listening, respect, and being able to talk honestly.' },
+    { q: 'Which memory belongs in a scrapbook?', o: ['Only perfect days', 'The funny, ordinary moments too', 'Only expensive dates'], c: 1, n: 'The everyday memories are often the ones we treasure most.' },
+    { q: "What's a lovely way to show care?", o: ['Remembering small details', 'Keeping score', 'Expecting mind-reading'], c: 0, n: 'Thoughtfulness is a tiny gesture that can mean a lot.' },
+    { q: 'What is the best way to handle a disagreement?', o: ['Go quiet for days', 'Talk it through calmly', 'Win at any cost'], c: 1, n: 'Calm, honest talks turn disagreements into understanding.' },
+    { q: 'What makes an ordinary day better?', o: ['A kind message out of nowhere', 'Waiting for a special occasion', 'Saving every compliment'], c: 0, n: 'Small, unexpected kindness goes a long way.' }
+  ];
+  var qi = 0, qs = 0, qa = false;
+  function renderQuiz() {
+    var b = $('#quizBody');
+    if (qi >= quiz.length) {
+      var msg = qs === quiz.length ? 'Perfect score. You two clearly know what matters.' : qs >= 3 ? 'Lovely. Plenty of heart in those answers.' : 'Good try. Love is a practice, and you are doing it.';
+      b.innerHTML = '<div class="q-title">You scored ' + qs + ' out of ' + quiz.length + '</div><p class="note">' + msg + '</p><div style="margin-top:12px"><button class="btn" id="qAgain">Play again</button></div>';
+      $('#qAgain').addEventListener('click', function () { qi = 0; qs = 0; qa = false; renderQuiz(); });
+      if (qs >= 3) floatHearts(10);
+      return;
+    }
+    var q = quiz[qi];
+    b.innerHTML = '<div class="muted" style="margin-top:4px">Question ' + (qi + 1) + ' of ' + quiz.length + ' &middot; score ' + qs + '</div><div class="q-title">' + esc(q.q) + '</div><div class="opts"></div><div id="qNote"></div>';
+    var opts = $('.opts', b);
+    q.o.forEach(function (t, i) {
+      var bt = document.createElement('button'); bt.className = 'opt'; bt.textContent = t;
+      bt.addEventListener('click', function () {
+        if (qa) return; qa = true;
+        if (i === q.c) qs++;
+        $$('.opt', b).forEach(function (x, j) { x.classList.add(j === q.c ? 'right' : (j === i ? 'wrong' : '')); x.disabled = true; });
+        $('#qNote').innerHTML = '<p class="note">' + esc(q.n) + '</p><div style="margin-top:10px"><button class="btn" id="qNext">' + (qi === quiz.length - 1 ? 'See my score' : 'Next question') + '</button></div>';
+        $('#qNext').addEventListener('click', function () { qi++; qa = false; renderQuiz(); });
+      });
+      opts.appendChild(bt);
+    });
+  }
+
+  /* ---------- catch the hearts ---------- */
+  var hScore = 0, hTime = 20, hTimer = null, hSpawn = null, hBest = store('olf-hbest') || 0;
+  $('#hBest').textContent = hBest;
+  function endHearts() {
+    clearInterval(hTimer); clearInterval(hSpawn); hTimer = hSpawn = null;
+    var a = $('#arena'); $$('.heart', a).forEach(function (h) { h.remove(); });
+    var newBest = hScore > hBest; if (newBest) { hBest = hScore; store('olf-hbest', hBest); $('#hBest').textContent = hBest; }
+    $('#arenaMsg').hidden = false;
+    $('#arenaMsg').innerHTML = '<b style="font-size:22px">' + hScore + ' points</b><span>' + (newBest && hScore > 0 ? 'New best score!' : 'Nice catching.') + '</span><div><button class="btn" id="hStart">Play again</button></div>';
+    $('#hStart').addEventListener('click', startHearts);
+    if (newBest && hScore > 0) floatHearts(10);
+  }
+  function startHearts() {
+    hScore = 0; hTime = 20; $('#hScore').textContent = 0; $('#hTime').textContent = 20; $('#arenaMsg').hidden = true;
+    var a = $('#arena');
+    hTimer = setInterval(function () { hTime--; $('#hTime').textContent = hTime; if (hTime <= 0) endHearts(); }, 1000);
+    function spawn() {
+      var gold = Math.random() < 0.15, h = document.createElement('button');
+      h.className = 'heart' + (gold ? ' gold' : ''); h.setAttribute('aria-label', 'Heart'); h.innerHTML = heartSvg;
+      h.style.left = (Math.random() * (a.clientWidth - 48)) + 'px';
+      h.style.setProperty('--d', (2.1 + Math.random() * 1.6) + 's');
+      h.style.setProperty('--h', a.clientHeight + 'px');
+      h.style.setProperty('--r', (Math.random() * 50 - 25) + 'deg');
+      h.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        var pts = gold ? 3 : 1; hScore += pts; $('#hScore').textContent = hScore;
+        var p = document.createElement('div'); p.className = 'pop'; p.textContent = '+' + pts;
+        p.style.left = h.offsetLeft + 'px'; p.style.top = (h.getBoundingClientRect().top - a.getBoundingClientRect().top) + 'px';
+        a.appendChild(p); setTimeout(function () { p.remove(); }, 650); h.remove();
+      });
+      h.addEventListener('animationend', function () { h.remove(); });
+      a.appendChild(h);
+    }
+    spawn(); hSpawn = setInterval(spawn, 520);
+  }
+  $('#hStart').addEventListener('click', startHearts);
+
+  /* ---------- memory match ---------- */
+  var faces = ['p02.jpg', 'p13.jpg', 'p08.jpg', 'p19.jpg', 'p10.jpg', 'p01.jpg'];
+  function faceOn(c, f) { c.innerHTML = ''; c.style.background = 'url(' + f + ') center 25%/cover'; }
+  function faceOff(c) { c.style.background = ''; c.innerHTML = '<svg><use href="#i-heart"/></svg>'; }
+  var mFirst = null, mLock = false, mMoves = 0, mFound = 0;
+  var mBest = store('olf-mbest');
+  function showBest() { $('#mBest').textContent = mBest || '-'; }
+  function newMatch() {
+    var deck = faces.concat(faces).sort(function () { return Math.random() - .5; });
+    mFirst = null; mLock = false; mMoves = 0; mFound = 0; $('#mMoves').textContent = 0; $('#mWin').hidden = true; showBest();
+    var g = $('#match'); g.innerHTML = '';
+    deck.forEach(function (f) {
+      var c = document.createElement('button'); c.className = 'mcard'; c.dataset.f = f; c.setAttribute('aria-label', 'Hidden card'); c.innerHTML = '<svg><use href="#i-heart"/></svg>';
+      c.addEventListener('click', function () {
+        if (mLock || c.classList.contains('up') || c.classList.contains('done')) return;
+        c.classList.add('up'); faceOn(c, f); c.setAttribute('aria-label', 'Photo card');
+        if (!mFirst) { mFirst = c; return; }
+        mMoves++; $('#mMoves').textContent = mMoves;
+        if (mFirst.dataset.f === f) {
+          mFirst.classList.replace('up', 'done'); c.classList.replace('up', 'done'); mFirst = null; mFound++;
+          if (mFound === faces.length) {
+            var best = !mBest || mMoves < mBest; if (best) { mBest = mMoves; store('olf-mbest', mBest); showBest(); }
+            $('#mWin').hidden = false; $('#mWin').textContent = 'All pairs found in ' + mMoves + ' moves.' + (best ? ' New best!' : ''); floatHearts(12);
+          }
+        } else {
+          mLock = true; var a = mFirst; mFirst = null;
+          setTimeout(function () { [a, c].forEach(function (x) { x.classList.remove('up'); faceOff(x); x.setAttribute('aria-label', 'Hidden card'); }); mLock = false; }, 800);
+        }
+      });
+      g.appendChild(c);
+    });
+  }
+  $('#mReset').addEventListener('click', newMatch);
+
+  /* ---------- letter ---------- */
+  var letterOpen = false;
+  var paras = [
+    'Two years ago we began a story neither of us could have written in advance. It started small, with ordinary days and ordinary conversations, and somewhere along the way those days became the ones I look forward to most.',
+    "Thank you for the laughter that arrives at just the right moment, for your patience when I'm difficult, and for the way you make a plain afternoon feel like an event. The best parts of these two years were rarely planned. They were a message that made me smile, a long talk, a joke only we understand.",
+    "I'm grateful that we can be honest with each other and that we keep learning how to listen. Love, for me, looks like that: kindness on regular days, forgiveness on hard ones, and choosing each other again and again.",
+    "Here's to the memories we've collected and the blank pages still waiting. I hope we keep growing with patience, respect and a lot of laughing."
+  ];
+  function renderLetter() {
+    var box = $('#letterBox');
+    if (letterOpen) {
+      box.innerHTML = '<div class="letter rise"><div class="to">To my favourite person,</div><h2>A note for our second anniversary</h2>' + paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '<p class="sign">Happy 2nd anniversary. Always yours.</p></div>';
+      $('#letterBtn').textContent = 'Fold the letter';
+    } else {
+      box.innerHTML = '<div class="letter closed"><div class="to">There is a letter tucked inside this page...</div></div>';
+      $('#letterBtn').textContent = 'Open the letter';
+    }
+  }
+  $('#letterBtn').addEventListener('click', function () { letterOpen = !letterOpen; renderLetter(); if (letterOpen) floatHearts(8); });
+  $('#hugBtn').addEventListener('click', function () { floatHearts(18); toast('Sending the biggest virtual hug'); });
+
+  function renderNotes() {
+    var notes = store('olf-notes') || [], box = $('#noteList'); box.innerHTML = '';
+    notes.slice().reverse().forEach(function (n) {
+      var d = document.createElement('div');
+      d.innerHTML = '<div class="saved-note">' + esc(n.text) + '</div><div class="row" style="justify-content:space-between"><span class="muted">' + esc(n.when) + '</span><button class="t-del">Delete</button></div>';
+      $('.t-del', d).addEventListener('click', function () { store('olf-notes', (store('olf-notes') || []).filter(function (x) { return x.id !== n.id; })); renderNotes(); });
+      box.appendChild(d);
+    });
+  }
+  $('#noteSave').addEventListener('click', function () {
+    var t = $('#noteText').value.trim(); if (!t) { $('#noteStatus').textContent = 'Write something first.'; return; }
+    var notes = store('olf-notes') || [];
+    notes.push({ id: Date.now(), text: t, when: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) });
+    store('olf-notes', notes); $('#noteText').value = ''; $('#noteStatus').textContent = 'Saved on this device.'; renderNotes(); floatHearts(5);
+  });
+
+  /* ---------- boot ---------- */
+  openDB().then(renderPhotos);
+  renderTimeline(); renderQuiz(); newMatch(); renderLetter(); renderNotes();
+})();
+</script>
+
+</body>
+</html>
